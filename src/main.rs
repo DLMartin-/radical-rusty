@@ -69,12 +69,7 @@ fn game_loop(
     event_pump: &mut sdl2::EventPump,
 ) -> Result<(), GameError> {
     let canvas = &mut graphics_context.canvas;
-    let mut i: u8 = 155;
     'game_loop: loop {
-        i = i.wrapping_add(1);
-        canvas.set_draw_color(Color::RGB(i, 64, 255 - i));
-        canvas.clear();
-
         for event in event_pump.poll_iter() {
             match event {
                 Event::Quit { .. } => break 'game_loop,
@@ -82,9 +77,16 @@ fn game_loop(
             }
         }
 
-        canvas.present();
+        draw_frame(canvas);
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
     }
 
     Ok(())
+}
+
+fn draw_frame(canvas: &mut sdl2::render::Canvas<sdl2::video::Window>) {
+    canvas.set_draw_color(Color::RGB(0, 64, 255));
+    canvas.clear();
+    //Do other drawing here
+    canvas.present();
 }
